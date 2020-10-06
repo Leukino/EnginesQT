@@ -1,71 +1,53 @@
-# Prerequisites
-*.d
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Ignore thumbnails created by windows
-Thumbs.db
-
-# Ignore files build by Visual Studio
-*.obj
-*.pdb
-*.aps
-*.user
-# *.vcproj
-# *.vcxproj*
-# *.sln
-*.vspscc
-*_i.c
-*.i
-*.icf
-*_p.c
-*.ncb
-*.suo
-*.tlb
-*.tlh
-*.bak
-*.cache
-*.ilk
-*.log
-.vs
-
-[Bb]uild
-[Bb]in
-[Dd]ebug/
-*.sbr
-*.sdf
-obj/
-[R]elease/
-_ReSharper*/
-[Tt]est[Rr]esult*
-ipch/
-*.opensdf
-*.db
-*.opendb
-packages/
+EngineQT/.vs/3D Physics/v16/.suo
+EngineQT/.vs/3D Physics/v16/Preview/Browse.VC.db
+EngineQT/.vs/3D Physics/v16/Preview/Browse.VC.db-shm
+EngineQT/.vs/3D Physics/v16/Preview/Browse.VC.db-wal
+EngineQT/.vs/3D Physics/v16/Preview/Browse.VC.opendb
+EngineQT/3D Physics.vcxproj.user
+EngineQT/Debug/3D Physi.746CC4C3.tlog/3D Physics - class5.lastbuildstate
+EngineQT/Debug/3D Physi.746CC4C3.tlog/CL.command.1.tlog
+EngineQT/Debug/3D Physi.746CC4C3.tlog/CL.read.1.tlog
+EngineQT/Debug/3D Physi.746CC4C3.tlog/CL.write.1.tlog
+EngineQT/Debug/3D Physi.746CC4C3.tlog/link.command.1.tlog
+EngineQT/Debug/3D Physi.746CC4C3.tlog/link.read.1.tlog
+EngineQT/Debug/3D Physi.746CC4C3.tlog/link.write.1.tlog
+EngineQT/Debug/3D Physi.746CC4C3.tlog/unsuccessfulbuild
+EngineQT/Debug/3D Physics.log
+EngineQT/Debug/Application.obj
+EngineQT/Debug/Color.obj
+EngineQT/Debug/glmath.obj
+EngineQT/Debug/Light.obj
+EngineQT/Debug/log.obj
+EngineQT/Debug/Main.obj
+EngineQT/Debug/ModuleAudio.obj
+EngineQT/Debug/ModuleCamera3D.obj
+EngineQT/Debug/ModuleInput.obj
+EngineQT/Debug/ModulePhysics3D.obj
+EngineQT/Debug/ModulePlayer.obj
+EngineQT/Debug/ModuleRenderer3D.obj
+EngineQT/Debug/ModuleSceneIntro.obj
+EngineQT/Debug/ModuleWindow.obj
+EngineQT/Debug/Primitive.obj
+EngineQT/Debug/Timer.obj
+EngineQT/Debug/vc142.idb
+EngineQT/Debug/vc142.pdb
+EngineQT/Release/3D Physics - class5.exe
+EngineQT/Release/3D Physics.log
+EngineQT/Release/Application.obj
+EngineQT/Release/Color.obj
+EngineQT/Release/glmath.obj
+EngineQT/Release/Light.obj
+EngineQT/Release/log.obj
+EngineQT/Release/Main.obj
+EngineQT/Release/ModuleAudio.obj
+EngineQT/Release/ModuleCamera3D.obj
+EngineQT/Release/ModuleInput.obj
+EngineQT/Release/ModulePhysics3D.obj
+EngineQT/Release/ModulePlayer.obj
+EngineQT/Release/ModuleRenderer3D.obj
+EngineQT/Release/ModuleSceneIntro.obj
+EngineQT/Release/ModuleWindow.obj
+EngineQT/Release/Primitive.obj
+EngineQT/Release/Timer.obj
+EngineQT/Release/vc142.pdb
