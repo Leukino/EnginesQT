@@ -17,6 +17,9 @@ bool ModulePlayer::Start()
 	vec3 direction(0,-1,0);
 	vec3 axis(-1,0,0);
 
+	ImGui::Text("char");
+
+
 	return true;
 }
 
