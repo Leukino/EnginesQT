@@ -1,5 +1,6 @@
 #include "Application.h"
 
+using namespace std;
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -46,25 +47,23 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	// Call Init() in all modules
-	std::list<Module*>::iterator item = list_modules.begin();
+	// Needed to initialize PCG (Random Number Generator Library)
 
-	while(item != list_modules.end())
+	//InitSeed();
+
+	// Call Init() in all modules
+	for (list<Module*>::iterator item = list_modules.begin(); item != list_modules.end() && ret; ++item)
 	{
 		ret = (*item)->Init();
-		item++;
 	}
 
 	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
-	item = list_modules.begin();
-
-	while(item != list_modules.end())
+	for (list<Module*>::iterator item = list_modules.begin(); item != list_modules.end() && ret; ++item)
 	{
 		ret = (*item)->Start();
-		item++;
 	}
-	
+
 	ms_timer.Start();
 	return ret;
 }
@@ -86,30 +85,22 @@ update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
-	
-	std::list<Module*>::iterator item = list_modules.begin();
-	
-	while((*item) != NULL && ret == UPDATE_CONTINUE)
+
+	for (list<Module*>::iterator item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; ++item)
 	{
 		ret = (*item)->PreUpdate(dt);
-		item++;
 	}
 
-	item = list_modules.begin();
-
-	while((*item) != NULL && ret == UPDATE_CONTINUE)
+	for (list<Module*>::iterator item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; ++item)
 	{
 		ret = (*item)->Update(dt);
-		item++;
 	}
 
-	item = list_modules.begin();
-
-	while((*item) != NULL && ret == UPDATE_CONTINUE)
+	for (list<Module*>::iterator item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; ++item)
 	{
 		ret = (*item)->PostUpdate(dt);
-		item++;
 	}
+
 
 	FinishUpdate();
 	return ret;

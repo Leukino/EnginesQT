@@ -3,6 +3,23 @@
 #include "ModulePlayer.h"
 #include "Primitive.h"
 
+//#include "imgui/imgui_impl_opengl2.h"
+
+
+//#include "imgui/imgui.h"
+
+//#include "imgui/examples/imgui_impl_sdl.h"
+//#include "imgui/examples/imgui_impl_win32.h"
+//#include "imgui/examples/imgui_impl_opengl3.h"
+
+#include "glew/include/GL/glew.h"
+#include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+#pragma comment (lib, "glew/lib/release/Win32/glew32.lib")
+#pragma comment( lib, "glew/lib/release/Win32/glew32s.lib")
+
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -17,9 +34,14 @@ bool ModulePlayer::Start()
 	vec3 direction(0,-1,0);
 	vec3 axis(-1,0,0);
 
-	ImGui::Text("char");
+	//ImGui::Text("char");
 
-
+	if (GLEW_OK != glewInit())
+	{
+		LOG("GLEW WENT BRRR");
+	}
+	else
+		LOG("KEKW");
 	return true;
 }
 
