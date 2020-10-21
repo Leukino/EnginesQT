@@ -14,11 +14,16 @@
 
 #include "glew/include/GL/glew.h"
 #include "SDL/include/SDL_opengl.h"
+
+#include <gl/glew.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #pragma comment (lib, "glew/lib/release/Win32/glew32.lib")
 #pragma comment( lib, "glew/lib/release/Win32/glew32s.lib")
+
+#include "imgui/imgui.h"
+
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {

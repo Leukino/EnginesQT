@@ -1,4 +1,4 @@
-// dear imgui, v1.80 WIP
+// dear imgui, v1.79
 // (main code and documentation)
 
 // Help:
@@ -371,15 +371,6 @@ CODE
  When you are not sure about a old symbol or function name, try using the Search/Find function of your IDE to look for comments or references in all imgui files.
  You can read releases logs https://github.com/ocornut/imgui/releases for more details.
 
- - 2020/10/12 (1.80) - removed redirecting functions/enums that were marked obsolete in 1.60 (April 2018):
-                        - io.RenderDrawListsFn pointer        -> use ImGui::GetDrawData() value and call the render function of your back-end
-                        - ImGui::IsAnyWindowFocused()         -> use ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow)
-                        - ImGui::IsAnyWindowHovered()         -> use ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)
-                        - ImGuiStyleVar_Count_                -> use ImGuiStyleVar_COUNT
-                        - ImGuiMouseCursor_Count_             -> use ImGuiMouseCursor_COUNT
-                      - removed redirecting functions names that were marked obsolete in 1.61 (May 2018):
-                        - InputFloat (... int decimal_precision ...) -> use InputFloat (... const char* format ...) with format = "%.Xf" where X is your value for decimal_precision.
-                        - same for InputFloat2()/InputFloat3()/InputFloat4() variants taking a `int decimal_precision` parameter.
  - 2020/10/05 (1.79) - removed ImGuiListClipper: Renamed constructor parameters which created an ambiguous alternative to using the ImGuiListClipper::Begin() function, with misleading edge cases (note: imgui_memory_editor <0.40 from imgui_club/ used this old clipper API. Update your copy if needed).
  - 2020/09/25 (1.79) - renamed ImGuiSliderFlags_ClampOnInput to ImGuiSliderFlags_AlwaysClamp. Kept redirection enum (will obsolete sooner because previous name was added recently).
  - 2020/09/25 (1.79) - renamed style.TabMinWidthForUnselectedCloseButton to style.TabMinWidthForCloseButton.
@@ -1046,6 +1037,10 @@ ImGuiIO::ImGuiIO()
     ClipboardUserData = NULL;
     ImeSetInputScreenPosFn = ImeSetInputScreenPosFn_DefaultImpl;
     ImeWindowHandle = NULL;
+
+#ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    RenderDrawListsFn = NULL;
+#endif
 
     // Input (NB: we already have memset zero the entire structure!)
     MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
@@ -3315,31 +3310,13 @@ void ImGui::DestroyContext(ImGuiContext* ctx)
     IM_DELETE(ctx);
 }
 
-// No specific ordering/dependency support, will see as needed
-void ImGui::AddContextHook(ImGuiContext* ctx, const ImGuiContextHook* hook)
-{
-    ImGuiContext& g = *ctx;
-    IM_ASSERT(hook->Callback != NULL);
-    g.Hooks.push_back(*hook);
-}
-
-// Call context hooks (used by e.g. test engine)
-// We assume a small number of hooks so all stored in same array
-void ImGui::CallContextHooks(ImGuiContext* ctx, ImGuiContextHookType hook_type)
-{
-    ImGuiContext& g = *ctx;
-    for (int n = 0; n < g.Hooks.Size; n++)
-        if (g.Hooks[n].Type == hook_type)
-            g.Hooks[n].Callback(&g, &g.Hooks[n]);
-}
-
 ImGuiIO& ImGui::GetIO()
 {
     IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() and ImGui::SetCurrentContext() ?");
     return GImGui->IO;
 }
 
-// Pass this to your back-end rendering function! Valid after Render() and until the next call to NewFrame()
+// Same value as passed to the old io.RenderDrawListsFn function. Valid after Render() and until the next call to NewFrame()
 ImDrawData* ImGui::GetDrawData()
 {
     ImGuiContext& g = *GImGui;
@@ -3758,7 +3735,9 @@ void ImGui::NewFrame()
     IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() and ImGui::SetCurrentContext() ?");
     ImGuiContext& g = *GImGui;
 
-    CallContextHooks(&g, ImGuiContextHookType_NewFramePre);
+#ifdef IMGUI_ENABLE_TEST_ENGINE
+    ImGuiTestEngineHook_PreNewFrame(&g);
+#endif
 
     // Check and assert for various common IO and Configuration mistakes
     ErrorCheckNewFrameSanityChecks();
@@ -3928,7 +3907,9 @@ void ImGui::NewFrame()
     Begin("Debug##Default");
     IM_ASSERT(g.CurrentWindow->IsFallbackWindow == true);
 
-    CallContextHooks(&g, ImGuiContextHookType_NewFramePost);
+#ifdef IMGUI_ENABLE_TEST_ENGINE
+    ImGuiTestEngineHook_PostNewFrame(&g);
+#endif
 }
 
 // [DEBUG] Item picker tool - start with DebugStartItemPicker() - useful to visually select an item and break into its call-stack.
@@ -4013,12 +3994,15 @@ void ImGui::Shutdown(ImGuiContext* context)
     if (g.SettingsLoaded && g.IO.IniFilename != NULL)
     {
         ImGuiContext* backup_context = GImGui;
-        SetCurrentContext(&g);
+        SetCurrentContext(context);
         SaveIniSettingsToDisk(g.IO.IniFilename);
         SetCurrentContext(backup_context);
     }
 
-    CallContextHooks(&g, ImGuiContextHookType_Shutdown);
+    // Notify hooked test engine, if any
+#ifdef IMGUI_ENABLE_TEST_ENGINE
+    ImGuiTestEngineHook_Shutdown(context);
+#endif
 
     // Clear everything else
     for (int i = 0; i < g.Windows.Size; i++)
@@ -4218,8 +4202,6 @@ void ImGui::EndFrame()
         return;
     IM_ASSERT(g.WithinFrameScope && "Forgot to call ImGui::NewFrame()?");
 
-    CallContextHooks(&g, ImGuiContextHookType_EndFramePre);
-
     ErrorCheckEndFrameSanityChecks();
 
     // Notify OS when our Input Method Editor cursor has moved (e.g. CJK inputs using Microsoft IME)
@@ -4286,8 +4268,6 @@ void ImGui::EndFrame()
     g.IO.MouseWheel = g.IO.MouseWheelH = 0.0f;
     g.IO.InputQueueCharacters.resize(0);
     memset(g.IO.NavInputs, 0, sizeof(g.IO.NavInputs));
-
-    CallContextHooks(&g, ImGuiContextHookType_EndFramePost);
 }
 
 void ImGui::Render()
@@ -4300,8 +4280,6 @@ void ImGui::Render()
     g.FrameCountRendered = g.FrameCount;
     g.IO.MetricsRenderWindows = 0;
     g.DrawDataBuilder.Clear();
-
-    CallContextHooks(&g, ImGuiContextHookType_RenderPre);
 
     // Add background ImDrawList
     if (!g.BackgroundDrawList.VtxBuffer.empty())
@@ -4335,7 +4313,11 @@ void ImGui::Render()
     g.IO.MetricsRenderVertices = g.DrawData.TotalVtxCount;
     g.IO.MetricsRenderIndices = g.DrawData.TotalIdxCount;
 
-    CallContextHooks(&g, ImGuiContextHookType_RenderPost);
+    // (Legacy) Call the Render callback function. The current prefer way is to let the user retrieve GetDrawData() and call the render function themselves.
+#ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    if (g.DrawData.CmdListsCount > 0 && g.IO.RenderDrawListsFn != NULL)
+        g.IO.RenderDrawListsFn(&g.DrawData);
+#endif
 }
 
 // Calculate text size. Text can be multi-line. Optionally ignore text after a ## marker.
