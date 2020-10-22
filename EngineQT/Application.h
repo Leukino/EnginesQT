@@ -12,6 +12,19 @@
 #include "ModulePhysics3D.h"
 #include "ModulePlayer.h"
 
+#include "glew/include/GL/glew.h"
+#include "SDL/include/SDL_opengl.h"
+
+#include <gl/glew.h>
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui.h"
+
+#pragma comment (lib, "glew/lib/release/Win32/glew32.lib")
+#pragma comment( lib, "glew/lib/release/Win32/glew32s.lib")
+
 class Application
 {
 public:
