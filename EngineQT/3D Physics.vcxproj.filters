@@ -81,13 +81,16 @@
     <ClInclude Include="glew\include\GL\glew.h">
       <Filter>Sources\Tools\libs\glew</Filter>
     </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Sources\Tools\libs\imgui</Filter>
+    </ClInclude>
     <ClInclude Include="imgui\imgui.h">
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_impl_opengl3.h">
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_win32.h">
+    <ClInclude Include="imgui\imgui_impl_sdl.h">
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
@@ -100,9 +103,6 @@
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
-      <Filter>Sources\Tools\libs\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imconfig.h">
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -167,7 +167,7 @@
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+    <ClCompile Include="imgui\imgui_impl_sdl.cpp">
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
