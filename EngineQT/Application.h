@@ -49,6 +49,12 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	int cpuCores = -1;
+	int systemRAM = -1;
+	bool RDTSC, MMX, SSE, SSE2, SSE3, SSE41, SSE42, AVX = false;
+	int gpuTotalVram = -1;
+	int gpuAvailVram = -1;
+	int gpuUsedVram = -1;
 private:
 
 	void AddModule(Module* mod);

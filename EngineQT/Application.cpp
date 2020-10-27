@@ -1,4 +1,5 @@
 #include "Application.h"
+#include <string>
 
 using namespace std;
 Application::Application()
@@ -62,6 +63,25 @@ bool Application::Init()
 	{
 		ret = (*item)->Start();
 	}
+
+	cpuCores = SDL_GetCPUCount(); 
+	systemRAM = SDL_GetSystemRAM();
+	RDTSC = SDL_HasRDTSC();
+	MMX = SDL_HasMMX();
+	SSE = SDL_HasSSE();
+	SSE2 = SDL_HasSSE2();
+	SSE3 = SDL_HasSSE3();
+	SSE41 = SDL_HasSSE41();
+	SSE42 = SDL_HasSSE42();
+	AVX = SDL_HasAVX();
+	char* vendorChar= (char*)glGetString(GL_VENDOR);
+	char* rendererChar = (char*)glGetString(GL_RENDERER);
+	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &(int)gpuTotalVram);
+	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &(int)gpuAvailVram);
+	//glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &(int)gpuUsedVram);
+	LOG("CPU CORES: %d, RAM: %f GB", cpuCores, systemRAM* 0.0009765625);
+	LOG("Graphics card: %s, Vendor: %s", rendererChar, vendorChar);
+	LOG("Total VRAM: %f MB, Available VRAM: %f MB", (float)gpuTotalVram, (float)gpuAvailVram/*, (float)gpuUsedVram*/);
 
 	ms_timer.Start();
 	return ret;
