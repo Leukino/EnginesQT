@@ -11,6 +11,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
 	player = new ModulePlayer(this);
+	ui = new ModuleUI(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -46,25 +47,6 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
-
-	// Needed to initialize PCG (Random Number Generator Library)
-
-	//ImGui::CreateContext();
-	//ImGui_ImplSDL2_InitForOpenGL(window->window, );
-	
-	//ImGuiContext* context = ImGui::GetCurrentContext();
-	//ImGui::NewFrame();
-	//ImGui::Begin("Dear ImGui Style Editor", false);
-	//ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver);
-	//ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
-
-	//ImGuiWindowFlags firstwindowflag;
-	//bool* isActive = nullptr;
-	//ImGui::Begin("My first tool!", isActive, firstwindowflag);
-	//ImGui::Text("No puedes conmigo domingo");
-
-	//ImGui::ShowDemoWindow();
-
 
 	//InitSeed();
 
