@@ -2,6 +2,15 @@
 #include "Application.h"
 #include "ModulePlayer.h"
 
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/Importer.hpp"
+
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
+
+#include <iostream>
+
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -15,8 +24,10 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	vec3 direction(0,-1,0);
 	vec3 axis(-1,0,0);
-
-
+	struct aiLogStream stream;
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&stream);
+	aiLogStream();
 	return true;
 }
 
@@ -24,7 +35,7 @@ bool ModulePlayer::Start()
 bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
-
+	aiDetachAllLogStreams();
 	return true;
 }
 

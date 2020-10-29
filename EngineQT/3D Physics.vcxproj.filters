@@ -28,6 +28,9 @@
     <Filter Include="Sources\Tools\libs\glew">
       <UniqueIdentifier>{a20cfd65-5333-4829-943f-c1c830e959e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\libs\assimp">
+      <UniqueIdentifier>{6a334daf-154d-447e-8a1f-733e0ba079b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -107,6 +110,18 @@
     </ClInclude>
     <ClInclude Include="ModuleUI.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Assimp\include\postprocess.h">
+      <Filter>Sources\Tools\libs\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Assimp\include\scene.h">
+      <Filter>Sources\Tools\libs\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Assimp\include\cimport.h">
+      <Filter>Sources\Tools\libs\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="Assimp\include\Importer.hpp">
+      <Filter>Sources\Tools\libs\assimp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -94,6 +94,8 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
+		//glEnable(GL_TEXTURE_2D);
 	}
 
 	// Projection matrix for
@@ -109,7 +111,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->GetViewMatrix());	
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
@@ -123,6 +125,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	draw();
+	//todo draw things :)
+
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -144,9 +149,61 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f); //fov :O
 	glLoadMatrixf(&ProjectionMatrix);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+
+void ModuleRenderer3D::draw() 
+{
+	glLineWidth(2.0f);
+	glBegin(GL_TRIANGLES);
+	GLfloat vertices[] =
+	{
+		(1.0f, 1.0f, 1.0f),
+		(0.0f, 1.0f, 1.0f),
+		(0.0f, 0.0f, 1.0f),
+		(1.0f, 0.0f, 1.0f)
+	};
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+
+	glDrawArrays(GL_TRIANGLES, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//glVertex3f(1.0f, 1.0f, 1.0f);    // v0-v1-v2
+	//glVertex3f(0.0f, 1.0f, 1.0f);
+	//glVertex3f(0.0f, 0.0f, 1.0f);
+	//
+	//glVertex3f(0.0f, 0.0f, 1.0f);
+	//glVertex3f(1.0f, 1.0f, 1.0f); 
+	//glVertex3f(1.0f, 0.0f, 1.0f);	// v2-v3-v0
+
+	//// right face =================
+	//glVertex3f(v0);    // v0-v3-v4
+	//glVertex3f(v3);
+	//glVertex3f(v4);
+
+	//glVertex3f(v4);    // v4-v5-v0
+	//glVertex3f(v5);
+	//glVertex3f(v0);
+
+	//// top face ===================
+	//glVertex3f(v0);    // v0-v5-v6
+	//glVertex3f(v5);
+	//glVertex3f(v6);
+
+	//glVertex3f(v6);    // v6-v1-v0
+	//glVertex3f(v1);
+	//glVertex3f(v0);
+
+
+	//glVertex3f(0.0f, 0.0f, 0.0f);
+	//glVertex3f(0.0f, 10.0f, 0.0f);
+
+
+	glEnd();
+	return;
 }
