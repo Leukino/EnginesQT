@@ -123,6 +123,9 @@
     <ClInclude Include="Assimp\include\Importer.hpp">
       <Filter>Sources\Tools\libs\assimp</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleSimp.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -192,6 +195,9 @@
       <Filter>Sources\Tools\libs\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ModuleUI.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSimp.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
