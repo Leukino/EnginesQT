@@ -12,7 +12,8 @@
 //#include "imgui/examples/imgui_impl_opengl3.h"
 //#include "imgui/examples/imgui_impl_win32.h"
 
-#include "glew/include/GL/glew.h"
+//#include "glew/include/GL/glew.h"
+#include <gl/glew.h>
 
 enum main_states
 {
@@ -26,7 +27,7 @@ enum main_states
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
-
+	
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 	Application* App = NULL;

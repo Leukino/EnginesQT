@@ -2,11 +2,16 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "SDL\include\SDL_opengl.h"
+
+#include <gl/glew.h>
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+
+
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -24,6 +29,12 @@ bool ModuleRenderer3D::Init()
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
+	if (GLEW_OK != glewInit())
+	{
+		LOG("GLEW WENT BRRR");
+	}
+	else
+		LOG("GLEW INITIALIZED");
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -94,6 +105,8 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
+		//glEnable(GL_TEXTURE_2D);
 	}
 
 	// Projection matrix for
@@ -109,7 +122,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->GetViewMatrix());	
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
@@ -123,6 +136,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	draw();
+	//todo draw things :)
+
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -144,9 +160,82 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f); //fov :O
 	glLoadMatrixf(&ProjectionMatrix);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+
+void ModuleRenderer3D::draw() 
+{
+	glLineWidth(2.0f);
+	glBegin(GL_TRIANGLES);
+	//GLfloat vertices[] =
+	//{
+	//	1.0f, 1.0f, 1.0f,
+	//	0.0f, 1.0f, 1.0f,
+	//	0.0f, 0.0f, 1.0f
+	//};
+
+	GLfloat Vertices[] = {
+	-0.8f, -0.8f, 0.0f, 1.0f,
+	 0.0f,  0.8f, 0.0f, 1.0f,
+	 0.8f, -0.8f, 0.0f, 1.0f
+	};
+
+	GLubyte indices[] = {
+		0, 1, 2, 2, 3, 0
+	};
+
+	uint my_id = 0;
+	glGenBuffers(1, (GLuint*) & (my_id));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 3, Vertices, GL_STATIC_DRAW);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, Vertices);
+	
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+	//glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_BYTE, indices);
+
+
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	//glVertex3f(1.0f, 1.0f, 1.0f);    // v0-v1-v2
+	//glVertex3f(0.0f, 1.0f, 1.0f);
+	//glVertex3f(0.0f, 0.0f, 1.0f);
+	
+	//glVertex3f(0.0f, 0.0f, 1.0f);
+	//glVertex3f(1.0f, 1.0f, 1.0f); 
+	//glVertex3f(1.0f, 0.0f, 1.0f);	// v2-v3-v0
+
+	//// right face =================
+	//glVertex3f(v0);    // v0-v3-v4
+	//glVertex3f(v3);
+	//glVertex3f(v4);
+
+	//glVertex3f(v4);    // v4-v5-v0
+	//glVertex3f(v5);
+	//glVertex3f(v0);
+
+	//// top face ===================
+	//glVertex3f(v0);    // v0-v5-v6
+	//glVertex3f(v5);
+	//glVertex3f(v6);
+
+	//glVertex3f(v6);    // v6-v1-v0
+	//glVertex3f(v1);
+	//glVertex3f(v0);
+
+
+	//glVertex3f(0.0f, 0.0f, 0.0f);
+	//glVertex3f(0.0f, 10.0f, 0.0f);
+
+
+	glEnd();
+	return;
 }
