@@ -8,6 +8,10 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "glew/include/GL/glew.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_sdl.h"
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
@@ -28,6 +32,13 @@ bool ModuleRenderer3D::Init()
 	bool ret = true;
 	
 	//Create context
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
 	context = SDL_GL_CreateContext(App->window->window);
 	if (GLEW_OK != glewInit())
 	{
@@ -35,11 +46,15 @@ bool ModuleRenderer3D::Init()
 	}
 	else
 		LOG("GLEW INITIALIZED");
+
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
+
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
+	ImGui_ImplOpenGL3_Init("#version 330");
 	
 	if(ret == true)
 	{
@@ -148,7 +163,13 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
 	SDL_GL_DeleteContext(context);
+	SDL_DestroyWindow(App->window->window);
+	SDL_Quit();
 
 	return true;
 }
