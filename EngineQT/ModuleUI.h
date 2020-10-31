@@ -17,5 +17,6 @@ public:
 
 private:
 
+	bool prueba = false;
 	bool debug;
 };

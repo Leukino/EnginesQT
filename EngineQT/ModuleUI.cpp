@@ -10,6 +10,8 @@
 #include <gl/GLU.h>
 
 #include "imgui/imgui.h"
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #pragma comment (lib, "glew/lib/release/Win32/glew32.lib")
 #pragma comment( lib, "glew/lib/release/Win32/glew32s.lib")
@@ -26,28 +28,6 @@ ModuleUI::~ModuleUI()
 // Render not available yet----------------------------------
 bool ModuleUI::Init()
 {
-	if (GLEW_OK != glewInit())
-	{
-		LOG("GLEW WENT BRRR");
-	}
-	else
-		LOG("GLEW INITIALIZED");
-
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiContext* context =  ImGui::GetCurrentContext();
-	//ImGui::NewFrame();
-	//ImGui::Begin("Dear ImGui Style Editor", false);
-	//ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver);
-	//ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
-
-	//ImGuiWindowFlags firstwindowflag;
-	//bool* isActive = nullptr;
-	//ImGui::Begin("My first tool!", isActive, firstwindowflag);
-	//ImGui::Text("No puedes conmigo domingo");
-
-	//ImGui::ShowDemoWindow();
-
 	bool ret = true;
 	return ret;
 }
@@ -67,6 +47,38 @@ update_status ModuleUI::PreUpdate(float dt)
 // ---------------------------------------------------------
 update_status ModuleUI::Update(float dt)
 {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(App->window->window);
+    ImGui::NewFrame();
+
+    static float f = 0.0f;
+    static int counter = 0;
+    
+    ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+    ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+    ImGui::Checkbox("Demo Window", &prueba);      // Edit bools storing our window open/close state
+       
+
+    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        
+
+    if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+       counter++;
+    ImGui::SameLine();
+    ImGui::Text("counter = %d", counter);
+
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::End();
+    
+    glUseProgram(0);
+    ImGui::Render();
+   
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    SDL_GL_SwapWindow(App->window->window);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -79,5 +91,6 @@ update_status ModuleUI::PostUpdate(float dt)
 // Called before quitting
 bool ModuleUI::CleanUp()
 {
+
 	return true;
 }
