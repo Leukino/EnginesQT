@@ -12,6 +12,7 @@
 #include "ModulePhysics3D.h"
 #include "ModulePlayer.h"
 #include "ModuleUI.h"
+#include "ModuleSimp.h"
 
 //#include "glew/include/GL/glew.h"
 #include <gl/glew.h>
@@ -32,6 +33,7 @@ public:
 	ModulePhysics3D* physics;
 	ModulePlayer* player;
 	ModuleUI* ui;
+	ModuleSimp* assimp;
 
 private:
 

@@ -26,10 +26,11 @@ Application::Application()
 	AddModule(audio);
 	AddModule(physics);
 	AddModule(ui);
+	//AddModule(assimp);
 
 	// Scenes
-	AddModule(scene_intro);
 	AddModule(player);
+	AddModule(scene_intro);
 	
 	// Renderer last!
 	AddModule(renderer3D);

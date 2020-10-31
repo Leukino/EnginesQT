@@ -8,7 +8,6 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#include "glew/include/GL/glew.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_sdl.h"
 
@@ -193,38 +192,59 @@ void ModuleRenderer3D::draw()
 {
 	glLineWidth(2.0f);
 	glBegin(GL_TRIANGLES);
-	//GLfloat vertices[] =
-	//{
-	//	1.0f, 1.0f, 1.0f,
-	//	0.0f, 1.0f, 1.0f,
-	//	0.0f, 0.0f, 1.0f
-	//};
+	GLfloat cube[] =
+	{
+		0.583f,  0.771f,  0.014f,
+	0.609f,  0.115f,  0.436f,
+	0.327f,  0.483f,  0.844f,
+	0.822f,  0.569f,  0.201f,
+	0.435f,  0.602f,  0.223f,
+	0.310f,  0.747f,  0.185f,
+	0.597f,  0.770f,  0.761f,
+	0.559f,  0.436f,  0.730f,
+	0.359f,  0.583f,  0.152f,
+	0.483f,  0.596f,  0.789f,
+	0.559f,  0.861f,  0.639f,
+	0.195f,  0.548f,  0.859f
+	};
 
 	GLfloat Vertices[] = {
-	-0.8f, -0.8f, 0.0f, 1.0f,
+	0.8f, 0.8f, 0.0f, 1.0f,
 	 0.0f,  0.8f, 0.0f, 1.0f,
-	 0.8f, -0.8f, 0.0f, 1.0f
+	 0.8f, 0.8f, 0.0f, 1.0f
 	};
 
-	GLubyte indices[] = {
-		0, 1, 2, 2, 3, 0
+	GLuint indices[] = {
+		0, 1, 2, 2, 3, 0, 5, 4, 6, 8, 4, 2,
 	};
-
-	uint my_id = 0;
-	glGenBuffers(1, (GLuint*) & (my_id));
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 3, Vertices, GL_STATIC_DRAW);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_INDEX_ARRAY);
+	//pass vertices and indices to gpu kek
 
-	glVertexPointer(3, GL_FLOAT, 0, Vertices);
+	GLuint verticesID = 0;
+	glGenBuffers(1, &verticesID);
+	glBindBuffer(GL_ARRAY_BUFFER, verticesID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 * 3, cube, GL_STATIC_DRAW);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
-	//glDrawRangeElements(GL_TRIANGLES, 0, 3, 6, GL_UNSIGNED_BYTE, indices);
-
-
-
+	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	GLuint indicesID = 0;
+	glGenBuffers(1, &indicesID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * 6, indices, GL_STATIC_DRAW);
+	glIndexPointer(GL_UNSIGNED_INT, 0, indices);
+	
+	//glBindBuffer(GL_ARRAY_BUFFER, verticesID);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
+	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, nullptr);
+	
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_INDEX_ARRAY);
+	//unbind buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	//glVertex3f(1.0f, 1.0f, 1.0f);    // v0-v1-v2
 	//glVertex3f(0.0f, 1.0f, 1.0f);
