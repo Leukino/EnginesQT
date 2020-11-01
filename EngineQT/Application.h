@@ -13,6 +13,8 @@
 #include "ModulePlayer.h"
 #include "ModuleUI.h"
 #include "ModuleSimp.h"
+#include <list>
+#include <vector>
 
 //#include "glew/include/GL/glew.h"
 #include <gl/glew.h>
@@ -42,7 +44,7 @@ private:
 	std::list<Module*> list_modules;
 
 public:
-
+	bool escape = false;
 	Application();
 	~Application();
 
@@ -59,6 +61,12 @@ public:
 	int gpuTotalVram = -1;
 	int gpuAvailVram = -1;
 	int gpuUsedVram = -1;
+
+	std::vector<float> fps_log;
+	std::vector<float> ms_log;
+	int vector_limit;
+
+	bool vsync = false;
 private:
 
 	void AddModule(Module* mod);

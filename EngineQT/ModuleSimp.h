@@ -12,6 +12,9 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
+	Mesh LoadMesh(const char* file_path);
+
+	Mesh tontofeo;
 
 public:
 

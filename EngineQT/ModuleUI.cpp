@@ -115,7 +115,7 @@ void ModuleUI::MainMenuBar()
 			ImGui::Spacing();
 			if (ImGui::MenuItem("Exit", "ESC")) 
 			{ 
-
+				App->escape = true;
 			}
 			ImGui::EndMenu();
 		}
@@ -167,6 +167,12 @@ void ModuleUI::MainMenuBar()
 		
 		ImGui::Spacing();
 
+		ImGui::Text("VSync: ");
+		ImGui::SameLine();
+		ImGui::Checkbox("", &vsync);
+
+		ImGui::Spacing();
+
 		ImGui::Text("MinFPS");
 		ImGui::SameLine();
 		ImGui::SliderInt(" MaxFPS", &fps, 0, 240);
@@ -195,6 +201,12 @@ void ModuleUI::MainMenuBar()
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.47f, 1.0f), "%s%s%s%s%s%s%s%s", (App->RDTSC) ? "RDTSC " : "", (App->MMX) ? "MMX " : "", (App->SSE) ? "SSE " : "", (App->SSE2) ? "SSE2 " : "", (App->SSE3) ? "SSE3 " : "", (App->SSE41) ? "SSE41 " : "", (App->SSE42) ? "SSE42 " : "", (App->AVX) ? "AVX " : "");	
 
+		char title[25];
+		sprintf_s(title, 25, "Framerate %.1f", App->fps_log[App->fps_log.size() - 1]);
+		ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+		sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
+		ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+		//LOG("%d", App->fps_log[0]);
 		ImGui::End();
 	}
 }

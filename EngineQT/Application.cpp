@@ -13,6 +13,7 @@ Application::Application()
 	physics = new ModulePhysics3D(this);
 	player = new ModulePlayer(this);
 	ui = new ModuleUI(this);
+	assimp = new ModuleSimp(this);
 	
 
 	// The order of calls is very important!
@@ -20,6 +21,7 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	AddModule(assimp);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
@@ -33,8 +35,8 @@ Application::Application()
 	AddModule(scene_intro);
 
 	// Renderer last!
-	AddModule(renderer3D);
 	AddModule(ui);
+	AddModule(renderer3D);
 
 }
 
@@ -96,6 +98,12 @@ bool Application::Init()
 void Application::PrepareUpdate()
 {
 	dt = (float)ms_timer.Read() / 1000.0f;
+	ms_log.push_back(ms_timer.Read());
+	fps_log.push_back(1.0f / dt);
+	if (ms_log.size() > vector_limit) { // ms and fps fill at the same time, so only need top check one
+		ms_log.erase(ms_log.begin());
+		fps_log.erase(fps_log.begin());
+	}
 	ms_timer.Start();
 }
 
@@ -127,6 +135,8 @@ update_status Application::Update()
 
 
 	FinishUpdate();
+	if (escape)
+		return UPDATE_STOP;
 	return ret;
 }
 

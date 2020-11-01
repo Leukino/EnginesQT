@@ -20,7 +20,7 @@ public:
 private:
 
 	int fps = 60;
-
+	bool vsync = false;
 	
 
 

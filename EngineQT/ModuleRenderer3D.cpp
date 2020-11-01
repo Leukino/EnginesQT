@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "SDL\include\SDL_opengl.h"
+#include "ModuleSimp.h"
 
 #include <gl/glew.h>
 
@@ -138,6 +139,12 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());	
 
+	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+	{
+		myloadedmesh = App->assimp->LoadMesh("assets/models/warrior/warrior.FBX");
+	}
+
+	//LOG("Current mesh characteristics: Total Vertices %d\n, Total Indices %d", myloadedmesh.num_vertex, myloadedmesh.num_index);
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
@@ -193,28 +200,29 @@ void ModuleRenderer3D::draw()
 	glLineWidth(2.0f);
 	GLfloat cube[] =
 	{
-		0.583f,  0.771f,  0.014f,
-	0.609f,  0.115f,  0.436f,
-	0.327f,  0.483f,  0.844f,
-	0.822f,  0.569f,  0.201f,
-	0.435f,  0.602f,  0.223f,
-	0.310f,  0.747f,  0.185f,
-	0.597f,  0.770f,  0.761f,
-	0.559f,  0.436f,  0.730f,
-	0.359f,  0.583f,  0.152f,
-	0.483f,  0.596f,  0.789f,
-	0.559f,  0.861f,  0.639f,
-	0.195f,  0.548f,  0.859f
+	-1, -1, -1,
+	1, -1, -1,
+	1, 1, -1,
+	-1, 1, -1,
+	-1, -1, 1,
+	1, -1, 1,
+	1, 1, 1,
+	-1, 1, 1
 	};
 
-	GLfloat Vertices[] = {
-	0.8f, 0.8f, 0.0f, 1.0f,
-	 0.0f,  0.8f, 0.0f, 1.0f,
-	 0.8f, 0.8f, 0.0f, 1.0f
-	};
+	//GLfloat Vertices[] = {
+	//0.8f, 0.8f, 0.0f, 1.0f,
+	// 0.0f,  0.8f, 0.0f, 1.0f,
+	// 0.8f, 0.8f, 0.0f, 1.0f
+	//};
 
-	GLuint indices[] = {
-		0, 1, 2, 2, 3, 0, 5, 4, 6, 8, 4, 2, 8, 5, 6, 2, 7, 9, 3, 1, 5, 2, 4, 6
+	GLuint indices[] = 
+	{ 0, 1, 3, 3, 1, 2,
+	1, 5, 2, 2, 5, 6,
+	5, 4, 6, 6, 4, 7,
+	4, 0, 7, 7, 0, 3,
+	3, 2, 7, 7, 2, 6,
+	4, 5, 0, 0, 5, 1
 	};
 	glEnableVertexAttribArray(0);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -224,18 +232,16 @@ void ModuleRenderer3D::draw()
 	GLuint verticesID;
 	glGenBuffers(1, &verticesID);
 	glBindBuffer(GL_ARRAY_BUFFER, verticesID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube) /** 12 * 3*/, cube, GL_STATIC_DRAW);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
-	
-	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
+
 	GLuint indicesID;
 	glGenBuffers(1, &indicesID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices) /** 6*/, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	//glIndexPointer(GL_UNSIGNED_INT, 0, indices);
 	
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 42, GL_UNSIGNED_INT, 0);
 	
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_INDEX_ARRAY);
