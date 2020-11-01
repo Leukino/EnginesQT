@@ -50,6 +50,9 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	char* vendorChar = "ind";
+	char* rendererChar = "ind";
+
 	int cpuCores = -1;
 	int systemRAM = -1;
 	bool RDTSC, MMX, SSE, SSE2, SSE3, SSE41, SSE42, AVX = false;

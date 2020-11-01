@@ -25,15 +25,16 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(physics);
-	AddModule(ui);
+	
 	//AddModule(assimp);
 
 	// Scenes
 	AddModule(player);
 	AddModule(scene_intro);
-	
+
 	// Renderer last!
 	AddModule(renderer3D);
+	AddModule(ui);
 
 }
 
@@ -78,8 +79,8 @@ bool Application::Init()
 	SSE41 = SDL_HasSSE41();
 	SSE42 = SDL_HasSSE42();
 	AVX = SDL_HasAVX();
-	char* vendorChar= (char*)glGetString(GL_VENDOR);
-	char* rendererChar = (char*)glGetString(GL_RENDERER);
+	vendorChar = (char*)glGetString(GL_VENDOR);
+	rendererChar = (char*)glGetString(GL_RENDERER);
 	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &(int)gpuTotalVram);
 	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &(int)gpuAvailVram);
 	//glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &(int)gpuUsedVram);

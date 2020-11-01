@@ -20,6 +20,10 @@ public:
 
 	void SetTitle(const char* title);
 
+	void SetWindowed(bool enable);
+	void SetBorderless(bool enable);
+	void SetFullscreen(bool enable);
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

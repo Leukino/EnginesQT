@@ -41,49 +41,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(App->window->window);
-	ImGui::NewFrame();
-
-	//ImGui::StyleColorsClassic();
-	ImGui::StyleColorsDark();
-
-	MainMenuBar();
-
-	ImGui::Render();
-	ImGuiIO& io = ImGui::GetIO();
-	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	
-
 	return UPDATE_CONTINUE;
 }
 
-void ModuleSceneIntro::MainMenuBar()
-{
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("Exit", "ESC")) { // CALL QUIT APP
-			}
-			ImGui::EndMenu();
-		}
-		ImGui::Spacing();
 
-		if (ImGui::MenuItem("View"))
-		{
-	
-		}
-		ImGui::Spacing();
-
-		if (ImGui::MenuItem("Help"))
-		{
-
-		}
-		ImGui::Spacing();
-
-		ImGui::EndMainMenuBar();
-	}
-
-}

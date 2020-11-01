@@ -15,8 +15,16 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void MainMenuBar();
+
 private:
 
-	bool prueba = false;
+	int fps = 60;
+
+	
+
+
+	bool specMenu = false;
+	bool fullscreen = false;
 	bool debug;
 };
