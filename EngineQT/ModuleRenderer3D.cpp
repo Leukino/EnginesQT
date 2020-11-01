@@ -191,7 +191,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 void ModuleRenderer3D::draw() 
 {
 	glLineWidth(2.0f);
-	glBegin(GL_TRIANGLES);
 	GLfloat cube[] =
 	{
 		0.583f,  0.771f,  0.014f,
@@ -215,30 +214,28 @@ void ModuleRenderer3D::draw()
 	};
 
 	GLuint indices[] = {
-		0, 1, 2, 2, 3, 0, 5, 4, 6, 8, 4, 2,
+		0, 1, 2, 2, 3, 0, 5, 4, 6, 8, 4, 2, 8, 5, 6, 2, 7, 9, 3, 1, 5, 2, 4, 6
 	};
-
+	glEnableVertexAttribArray(0);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_INDEX_ARRAY);
 	//pass vertices and indices to gpu kek
 
-	GLuint verticesID = 0;
+	GLuint verticesID;
 	glGenBuffers(1, &verticesID);
 	glBindBuffer(GL_ARRAY_BUFFER, verticesID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 * 3, cube, GL_STATIC_DRAW);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube) /** 12 * 3*/, cube, GL_STATIC_DRAW);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
 	
 	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	GLuint indicesID = 0;
+	GLuint indicesID;
 	glGenBuffers(1, &indicesID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * 6, indices, GL_STATIC_DRAW);
-	glIndexPointer(GL_UNSIGNED_INT, 0, indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices) /** 6*/, indices, GL_STATIC_DRAW);
+	//glIndexPointer(GL_UNSIGNED_INT, 0, indices);
 	
-	//glBindBuffer(GL_ARRAY_BUFFER, verticesID);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
-	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, nullptr);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 	
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_INDEX_ARRAY);
